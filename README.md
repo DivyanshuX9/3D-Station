@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Immersive 3D Portfolio Gallery
+
+A high-quality interactive 3D portfolio built with React, Next.js, React Three Fiber, and Rapier physics. Explore a beautiful, modern gallery room in first-person, interact with exhibits, and enjoy realistic physics with movable furniture.
+
+## Features
+- Immersive first-person navigation (WASD + mouse)
+- Realistic movement physics, jumping, and collision
+- Dynamic, physics-enabled tables and chairs (pushable)
+- 3D models for art, furniture, and decor
+- Responsive UI overlays and map
+- Easy to extend with your own 3D models
+
+## Tech Stack
+- [React](https://reactjs.org/)
+- [Next.js](https://nextjs.org/)
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
+- [@react-three/drei](https://docs.pmnd.rs/drei/introduction)
+- [@react-three/rapier](https://pmndrs.github.io/react-three-rapier/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
+- [Howler.js](https://howlerjs.com/) (for sound)
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 1. Clone the repository
+```sh
+git clone <your-repo-url>
+cd portfolio-gallery
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```sh
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Run the development server
+```sh
+npm run dev
+```
+Visit [http://localhost:3000](http://localhost:3000) to view the app.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Adding 3D Models
+- Place your `.glb` or `.gltf` files in `public/models/`.
+- To add new furniture or art, import and use them in the scene (see `Furniture.tsx` for examples).
 
-## Learn More
+## Physics-Enabled Furniture
+- Tables and chairs are loaded from a model pack and wrapped in Rapier physics bodies.
+- You can push them around by walking into them.
+- To add more, duplicate the relevant code in `Furniture.tsx` and adjust positions.
 
-To learn more about Next.js, take a look at the following resources:
+## Customization
+- Edit `GalleryRoom.tsx` and `Furniture.tsx` to change layout, add new objects, or tweak physics.
+- UI and controls can be customized in `Gallery.tsx` and related components.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
+This project is for personal/portfolio use. 3D models may have their own licenses—please check before redistributing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Enjoy your interactive 3D portfolio!**
