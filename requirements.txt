@@ -1,9 +1,0 @@
-react
-next
-@react-three/fiber
-@react-three/drei
-@react-three/rapier
-framer-motion
-tailwindcss
-zustand
-howler 
