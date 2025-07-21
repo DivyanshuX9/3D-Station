@@ -25,7 +25,7 @@ A high-quality interactive 3D portfolio built with React, Next.js, React Three F
 
 ### 1. Clone the repository
 ```sh
-git clone <your-repo-url>
+git clone https://github.com/DivyanshuX9/3D-Station
 cd portfolio-gallery
 ```
 
@@ -54,8 +54,7 @@ Visit [http://localhost:3000](http://localhost:3000) to view the app.
 - UI and controls can be customized in `Gallery.tsx` and related components.
 
 ## License
-This project is for personal/portfolio use. 3D models may have their own licenses—please check before redistributing.
+This project is for personal use.
 
 ---
 
-**Enjoy your interactive 3D portfolio!**
