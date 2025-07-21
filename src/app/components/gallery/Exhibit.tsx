@@ -1,5 +1,5 @@
 import { Html, Text } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+// import { useFrame } from '@react-three/fiber'
 import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useGalleryStore } from '../../store/galleryStore'
@@ -16,11 +16,11 @@ export const Exhibit = ({ position, title, description, type }: ExhibitProps) =>
   const [isHovered, setIsHovered] = useState(false)
   const { currentZone } = useGalleryStore()
 
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01
-    }
-  })
+  // useFrame((state) => {
+  //   if (meshRef.current) {
+  //     meshRef.current.rotation.y += 0.01
+  //   }
+  // })
 
   return (
     <group position={position}>
