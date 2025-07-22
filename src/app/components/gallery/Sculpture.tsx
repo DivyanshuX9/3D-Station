@@ -11,7 +11,7 @@ interface SculptureProps {
   description: string
 }
 
-export const Sculpture = ({ position, rotation, scale, type, title, description }: SculptureProps) => {
+export const Sculpture = ({ position, rotation, scale }: SculptureProps) => {
   const groupRef = useRef<THREE.Group>(null)
   
   // Placeholder geometry until we have actual statue models

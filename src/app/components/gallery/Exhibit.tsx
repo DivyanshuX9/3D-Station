@@ -1,5 +1,4 @@
 import { Html, Text } from '@react-three/drei'
-// import { useFrame } from '@react-three/fiber'
 import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useGalleryStore } from '../../store/galleryStore'
