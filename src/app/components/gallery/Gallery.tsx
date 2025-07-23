@@ -1,6 +1,6 @@
 import { Grid, PerspectiveCamera } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { Suspense, useEffect, useState } from 'react'
 import * as THREE from 'three'
 import { LoadingScreen } from '../ui/LoadingScreen'
 import { GalleryRoom } from './GalleryRoom'
@@ -13,20 +13,6 @@ declare global {
     __appendTouchControls?: () => void;
   }
 }
-
-// Add environment mapping for reflections
-const DynamicReflection = () => {
-  
-  return (
-    <mesh visible={false}>
-      <sphereGeometry args={[500, 64, 64]} />
-      <meshBasicMaterial color="#87ceeb" side={THREE.BackSide} />
-    </mesh>
-  );
-};
-
-// Initial spawn position for the player (entrance)
-const spawnPosition = new THREE.Vector3(-150, 1.8, -250);
 
 // Simple color-based sky component instead of using Environment
 const CustomSky = () => {
@@ -47,122 +33,8 @@ const CustomFog = () => {
   );
 };
 
-// Custom lighting that changes based on night mode
-const CustomLighting = () => {
-  
-  return (
-    <>
-      <ambientLight 
-        intensity={1} 
-        color="#fff" 
-      />
-      
-      <directionalLight
-          position={[10, 10, 5]}
-          intensity={1.5}
-          castShadow
-          shadow-mapSize={[1024, 1024]}
-          shadow-camera-left={-100}
-          shadow-camera-right={100}
-          shadow-camera-top={100}
-          shadow-camera-bottom={-100}
-        />
-      
-      {/* Add a subtle blue moonlight in night mode */}
-      {/* This block is removed as per the edit hint */}
-      
-      {/* Add subtle rim light to highlight silhouettes */}
-      {/* This block is removed as per the edit hint */}
-    </>
-  );
-};
-
-// Entrance component for the gallery
-const Entrance = () => {
-  
-  return (
-    <group position={spawnPosition.toArray()}>
-      {/* Entrance platform */}
-      <mesh position={[0, -1, 0]} receiveShadow>
-        <boxGeometry args={[30, 2, 30]} />
-        <meshStandardMaterial 
-          color="#888"
-          metalness={0.2}
-          roughness={0.8}
-        />
-      </mesh>
-      
-      {/* Entrance light */}
-      <pointLight
-        position={[0, 5, 0]}
-        intensity={2}
-        color="#ffffff"
-        distance={30}
-        castShadow
-      />
-      
-      {/* Welcome sign */}
-      <mesh position={[0, 3, -10]} rotation={[0, 0, 0]}>
-        <planeGeometry args={[15, 5]} />
-        <meshStandardMaterial
-          color="#4477aa"
-          emissive="#000000"
-          emissiveIntensity={0}
-        />
-      </mesh>
-    </group>
-  );
-};
-
-// Night mode dust particles effect
-const NightDustParticles = () => {
-  const pointsRef = useRef<THREE.Points>(null);
-  
-  // Create particles only once and with reduced count
-  const particles = useMemo(() => {
-    
-    const particleCount = 100; // Reduced from 200
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    
-    for (let i = 0; i < particleCount; i++) {
-      // Distribute particles in a large volume
-      positions[i * 3] = (Math.random() - 0.5) * 800;
-      positions[i * 3 + 1] = Math.random() * 150 + 10;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 800;
-    }
-    
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    return geometry;
-  }, []);
-  
-  // Animate dust particles
-  useFrame((state) => {
-    if (pointsRef.current) {
-      // Slow rotation
-      pointsRef.current.rotation.y += 0.0002;
-      
-      // Subtle up and down motion
-      const time = state.clock.getElapsedTime();
-      pointsRef.current.position.y = Math.sin(time * 0.05) * 2;
-    }
-  });
-  
-  // Only render if in night mode and particles are created
-  if (!particles) return null;
-  
-  return (
-    <points ref={pointsRef}>
-      <primitive object={particles} />
-      <pointsMaterial
-        size={0.6}
-        color="#5555ff"
-        transparent
-        opacity={0.15}
-      />
-    </points>
-  );
-};
+// Initial spawn position for the player (entrance)
+const spawnPosition = new THREE.Vector3(-150, 1.8, -250);
 
 export const Gallery = () => {
   const [isLocked, setIsLocked] = useState(false)
