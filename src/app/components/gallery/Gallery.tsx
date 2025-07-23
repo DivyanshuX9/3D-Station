@@ -273,20 +273,17 @@ export const Gallery = () => {
       {/* This component is removed as per the edit hint */}
       
       <Canvas 
-        shadows={{ 
-          type: THREE.PCFSoftShadowMap,
-          enabled: true
-        }}
+        shadows={false}
         gl={{ 
-          antialias: true,
+          antialias: false,
           alpha: false,
           powerPreference: 'high-performance',
           precision: 'lowp',
           depth: true,
           stencil: false
         }}
-        performance={{ min: 0.5 }}
-        dpr={[0.8, 1.5]}
+        performance={{ min: 0.2 }}
+        dpr={[0.5, 1]}
       >
         <Suspense fallback={<LoadingScreen />}>
           <PerspectiveCamera 
@@ -298,28 +295,25 @@ export const Gallery = () => {
           />
           <CustomFog />
           <CustomSky />
-          <CustomLighting />
+          {/* Remove CustomLighting, Entrance, DynamicReflection, NightDustParticles for perf */}
           <GalleryRoom />
-          <Entrance />
           <PlayerController 
             onLock={handleLock} 
             onUnlock={handleUnlock} 
             onFallback={handleUseFallbackControls}
             onPause={handleTogglePause}
           />
-          <DynamicReflection />
-          <NightDustParticles />
           <Grid
             position={[0, 0.01, 0]}
-            args={[1000, 1000]}
+            args={[200, 200]}
             cellSize={20}
             cellThickness={0.5}
             cellColor="#2196f3"
             sectionSize={100}
             sectionThickness={1}
             sectionColor="#64b5f6"
-            fadeDistance={1000}
-            infiniteGrid={true}
+            fadeDistance={200}
+            infiniteGrid={false}
           />
         </Suspense>
       </Canvas>
