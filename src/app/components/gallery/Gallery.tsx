@@ -1,6 +1,6 @@
 import { Grid, PerspectiveCamera } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { LoadingScreen } from '../ui/LoadingScreen'
 import { GalleryRoom } from './GalleryRoom'
@@ -36,12 +36,67 @@ const CustomFog = () => {
 // Initial spawn position for the player (entrance)
 const spawnPosition = new THREE.Vector3(-150, 1.8, -250);
 
+// Animated 3D-styled logo for entry
+const AnimatedLogo = () => {
+  const logoRef = useRef<HTMLDivElement>(null)
+  return (
+    <div
+      ref={logoRef}
+      className="mb-6 flex flex-col items-center select-none"
+      style={{
+        perspective: '600px',
+        userSelect: 'none',
+      }}
+    >
+      <span
+        className="text-6xl font-extrabold tracking-tight text-blue-400 drop-shadow-lg"
+        style={{
+          transform: 'rotateX(18deg) rotateY(-12deg) scale(1.1)',
+          letterSpacing: '0.05em',
+          textShadow: '0 8px 32px #1e3a8a, 0 1px 0 #fff',
+        }}
+      >
+        3D-Station
+      </span>
+      <span className="text-lg text-blue-200 mt-2 tracking-widest animate-pulse">
+        Immersive Virtual Gallery
+      </span>
+    </div>
+  )
+}
+
+// Animated background for entry screen
+const EntryBackground = () => (
+  <div
+    className="absolute inset-0 z-0 animate-gradient-x bg-gradient-to-br from-blue-900 via-indigo-800 to-blue-400 opacity-80"
+    style={{
+      backgroundSize: '200% 200%',
+      filter: 'blur(2px)',
+    }}
+  />
+)
+
 export const Gallery = () => {
   const [isLocked, setIsLocked] = useState(false)
   const [useFallbackControls, setUseFallbackControls] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [isReady, setIsReady] = useState(false)
   const [showInstructions, setShowInstructions] = useState(true)
+  const [speedMultiplier, setSpeedMultiplier] = useState(1)
+
+  // Handle mouse wheel to adjust sprint speed
+  const handleWheel = useCallback((e: WheelEvent) => {
+    setSpeedMultiplier(prev => {
+      let next = prev + (e.deltaY < 0 ? 0.1 : -0.1)
+      next = Math.max(1, Math.min(4, next))
+      return Math.round(next * 10) / 10
+    })
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [handleWheel])
 
   // Wait for everything to load before allowing start interaction
   useEffect(() => {
@@ -108,38 +163,43 @@ export const Gallery = () => {
 
   return (
     <div className="w-full h-screen relative">
+      {/* Speed slider is now in the pause menu */}
+      
       {showInstructions && (
-        <div 
-          className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10 transition-opacity duration-500"
-        >
-          <h1 className="text-white text-4xl mb-4 font-bold">Modern Art Gallery</h1>
-          <p className="text-white mb-8 text-center max-w-md">
-            Click Start to explore this immersive gallery.<br/>
-            Use WASD to move, SPACE to jump, ESC to pause.<br/>
-            Click the moon icon to toggle night mode.
-          </p>
-          <button
-            onClick={handleStartClick}
-            className={`px-8 py-4 text-lg ${
-              isReady 
-                ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' 
-                : 'bg-gray-600 cursor-not-allowed'
-            } text-white rounded-lg transition-colors duration-300 shadow-lg`}
-            disabled={!isReady}
+        <>
+          <EntryBackground />
+          <div 
+            className="absolute inset-0 flex flex-col items-center justify-center z-10 transition-opacity duration-500"
           >
-            {isReady ? 'Enter Gallery' : 'Loading...'}
-          </button>
-        </div>
+            <AnimatedLogo />
+            <p className="text-white mb-8 text-center max-w-md text-lg drop-shadow">
+              Click Start to explore this immersive gallery.<br/>
+              Use <b>WASD</b> to move, <b>SPACE</b> to jump, <b>ESC</b> to pause.
+            </p>
+            <button
+              onClick={handleStartClick}
+              className={`px-8 py-4 text-lg font-bold shadow-xl border-2 border-blue-400 rounded-xl transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 text-white ${
+                isReady 
+                  ? 'hover:scale-105 cursor-pointer' 
+                  : 'bg-gray-600 cursor-not-allowed opacity-60'
+              }`}
+              disabled={!isReady}
+            >
+              {isReady ? 'Enter 3D-Station' : (
+                <span className="flex items-center gap-2">
+                  <span className="w-5 h-5 border-4 border-blue-300 border-t-transparent rounded-full animate-spin" />
+                  Loading...
+                </span>
+              )}
+            </button>
+          </div>
+        </>
       )}
       
-      {isPaused && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-white text-2xl mb-4 font-bold">Gallery Paused</h2>
-            <p className="text-white mb-6">Press ESC to resume exploration</p>
-          </div>
-        </div>
-      )}
+      {/* Sprint speed indicator at top center */}
+      <div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 bg-black/70 text-white px-4 py-1 rounded-full text-xs font-mono shadow">
+        Sprint Speed: {(speedMultiplier * 5).toFixed(1)}x (Scroll to adjust)
+      </div>
       
       {/* Night Mode Toggle */}
       {/* This component is removed as per the edit hint */}
@@ -174,6 +234,7 @@ export const Gallery = () => {
             onUnlock={handleUnlock} 
             onFallback={handleUseFallbackControls}
             onPause={handleTogglePause}
+            speedMultiplier={speedMultiplier}
           />
           <Grid
             position={[0, 0.01, 0]}
@@ -199,8 +260,8 @@ export const Gallery = () => {
         ) : (
           <>
             <h3 className="font-bold mb-1">First Person Controls:</h3>
-            <p>WASD to move, Shift to sprint (5x faster)</p>
-            <p>Space to jump, ESC to pause</p>
+            <p>WASD to move, Shift to sprint (5x faster or more)</p>
+            <p>Space to jump,Scroll to adjust sprint speed, ESC to pause</p>
           </>
         )}
       </div>

@@ -390,6 +390,26 @@ export const GalleryRoom = () => {
         )
       })}
       
+      {/* Stairs (series of boxes) */}
+      {Array.from({ length: 8 }).map((_, i) => (
+        <mesh
+          key={`stair-step-${i}`}
+          position={[roomWidth / 2 - 100 + i * 8, 2 + i * 2, roomLength / 2 - 80]}
+          castShadow
+          receiveShadow
+          userData={{ type: 'hard-structure' }}
+        >
+          <boxGeometry args={[8, 2, 30]} />
+          <meshStandardMaterial color="#bca16b" metalness={0.2} roughness={0.5} />
+        </mesh>
+      ))}
+
+      {/* Floating platform */}
+      <mesh position={[roomWidth / 2 - 60, 22, roomLength / 2 - 80]} castShadow receiveShadow userData={{ type: 'hard-structure' }}>
+        <boxGeometry args={[30, 2, 30]} />
+        <meshStandardMaterial color="#7ecfff" metalness={0.3} roughness={0.2} />
+      </mesh>
+      
       {/* Decorative pillars distributed around the gallery */}
       {/* Central pillars */}
       {Array.from({ length: 6 }).map((_, i) => {
@@ -641,7 +661,7 @@ export const GalleryRoom = () => {
       })}
       
       {/* Ambient lighting */}
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={1.0} />
       
       {/* Main lighting */}
       <directionalLight 
@@ -656,7 +676,7 @@ export const GalleryRoom = () => {
       />
       
       {/* Soft fill lights */}
-      <hemisphereLight args={['#fff9ee', '#002244', 0.5]} />
+      <hemisphereLight args={['#fff9ee', '#002244', 1.2]} />
       
       {/* Night mode lighting */}
       {/* Removed night mode lighting as per edit hint */}

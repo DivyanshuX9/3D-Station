@@ -24,9 +24,10 @@ interface PlayerControllerProps {
   onUnlock?: () => void;
   onFallback?: () => void;
   onPause?: (paused: boolean) => void;
+  speedMultiplier?: number;
 }
 
-export const PlayerController = ({ onLock, onUnlock, onFallback, onPause }: PlayerControllerProps = {}) => {
+export const PlayerController = ({ onLock, onUnlock, onFallback, onPause, speedMultiplier = 1 }: PlayerControllerProps = {}) => {
   // Use correct typing for refs
   const controlsRef = useRef<PointerLockControlsImpl>(null)
   const orbitControlsRef = useRef<OrbitControlsImpl>(null)
@@ -54,8 +55,8 @@ export const PlayerController = ({ onLock, onUnlock, onFallback, onPause }: Play
   
   // Position tracking
   const playerHeight = 1.8
-  const walkingSpeed = 900.0  // 4x increase from 25.0
-  const runningSpeed = 1800.0  // 5x increase from 80.0
+  const walkingSpeed = 900.0
+  const runningSpeed = 1800.0 * speedMultiplier;
   const spawnPosition = new THREE.Vector3(-150, playerHeight, -250)
   const lastPosition = useRef(new THREE.Vector3().copy(spawnPosition))
   const isMoving = useRef(false)
